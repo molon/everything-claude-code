@@ -8,13 +8,29 @@ disable-model-invocation: true
 
 ## Overview
 
-Install opencode CLI using the official installer script and verify installation works.
+Check if opencode is installed first. If already installed, verify it works. Only install if needed.
 
 ## Official Documentation
 
 **https://opencode.ai/docs/#install**
 
 Always reference official docs for the most current installation instructions.
+
+## Check and Verify First
+
+```bash
+# Check if opencode exists
+which opencode
+
+# If found, verify it works with a test
+opencode run "what is 2+2" --model opencode/big-pickle
+```
+
+**Expected output:** "4" or equivalent
+
+- If `opencode` exists AND test passes: Installation complete, done
+- If `opencode` not found: Proceed to installation below
+- If test fails: Try reinstallation or troubleshooting
 
 ## Installation
 
@@ -29,17 +45,7 @@ This is the official installation method. The installer handles PATH automatical
 curl -fsSL https://opencode.ai/install | sudo bash
 ```
 
-## Verification
-
-**After installation, always verify with a test:**
-
-```bash
-opencode run "what is 2+2" --model opencode/big-pickle
-```
-
-**Expected output:** "4" or equivalent
-
-Only after seeing correct output, confirm installation succeeded.
+After installation, run the verification test above.
 
 ## Troubleshooting
 
