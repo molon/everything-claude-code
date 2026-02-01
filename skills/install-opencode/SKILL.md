@@ -10,12 +10,6 @@ disable-model-invocation: true
 
 Check if opencode is installed first. If already installed, verify it works. Only install if needed.
 
-## Official Documentation
-
-**https://opencode.ai/docs/#install**
-
-Always reference official docs for the most current installation instructions.
-
 ## Check and Verify First
 
 ```bash
@@ -30,7 +24,13 @@ opencode run "what is 2+2" --model opencode/big-pickle
 
 - If `opencode` exists AND test passes: Installation complete, done
 - If `opencode` not found: Proceed to installation below
-- If test fails: Try reinstallation or troubleshooting
+- If test fails: Try troubleshooting
+
+## Official Documentation
+
+**https://opencode.ai/docs/#install**
+
+Always reference official docs for the most current installation instructions.
 
 ## Installation
 
@@ -41,6 +41,7 @@ curl -fsSL https://opencode.ai/install | bash
 This is the official installation method. The installer handles PATH automatically.
 
 **Permission denied?**
+
 ```bash
 curl -fsSL https://opencode.ai/install | sudo bash
 ```
