@@ -141,13 +141,27 @@ with open('$OBSERVATIONS_FILE', 'a') as f:
     f.write(json.dumps(observation) + '\n')
 EOF
 
-# Signal observer if running
+# Start observer if not running, then signal it
 OBSERVER_PID_FILE="${CONFIG_DIR}/.observer.pid"
+observer_running=false
+
+# Check if observer is already running
 if [ -f "$OBSERVER_PID_FILE" ]; then
   observer_pid=$(cat "$OBSERVER_PID_FILE")
   if kill -0 "$observer_pid" 2>/dev/null; then
+    observer_running=true
     kill -USR1 "$observer_pid" 2>/dev/null || true
   fi
+fi
+
+# Auto-start observer if not running (idempotent - start-observer.sh checks for existing instance)
+if [ "$observer_running" = false ]; then
+  if [ -n "${CLAUDE_PLUGIN_ROOT}" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/agents/start-observer.sh" ]; then
+    "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/agents/start-observer.sh" start >/dev/null 2>&1 &
+  elif [ -f "${HOME}/.claude/skills/learning-instinct/agents/start-observer.sh" ]; then
+    "${HOME}/.claude/skills/learning-instinct/agents/start-observer.sh" start >/dev/null 2>&1 &
+  fi
+  disown $! 2>/dev/null || true
 fi
 
 exit 0
