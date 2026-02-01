@@ -1,10 +1,10 @@
 ---
-name: continuous-learning-v2
+name: learning-instinct
 description: Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents.
 version: 2.0.0
 ---
 
-# Continuous Learning v2 - Instinct-Based Architecture
+# Learning Instinct - Instinct-Based Architecture
 
 An advanced learning system that turns your Claude Code sessions into reusable knowledge through atomic "instincts" - small learned behaviors with confidence scoring.
 
@@ -103,14 +103,14 @@ Add to your `~/.claude/settings.json`.
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre"
+        "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh pre"
       }]
     }],
     "PostToolUse": [{
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post"
+        "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh post"
       }]
     }]
   }
@@ -126,14 +126,14 @@ Add to your `~/.claude/settings.json`.
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre"
+        "command": "~/.claude/skills/learning-instinct/hooks/observe.sh pre"
       }]
     }],
     "PostToolUse": [{
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh post"
+        "command": "~/.claude/skills/learning-instinct/hooks/observe.sh post"
       }]
     }]
   }
@@ -152,20 +152,20 @@ touch ~/.claude/homunculus/observations.jsonl
 ### 3. Use the Instinct Commands
 
 ```bash
-/instinct-status     # Show learned instincts with confidence scores
+/status              # Show learned instincts with confidence scores
 /evolve              # Cluster related instincts into skills/commands
-/instinct-export     # Export instincts for sharing
-/instinct-import     # Import instincts from others
+/export              # Export instincts for sharing
+/import              # Import instincts from others
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/instinct-status` | Show all learned instincts with confidence |
+| `/status` | Show all learned instincts with confidence |
 | `/evolve` | Cluster related instincts into skills/commands |
-| `/instinct-export` | Export instincts for sharing |
-| `/instinct-import <file>` | Import instincts from others |
+| `/export` | Export instincts for sharing |
+| `/import <file>` | Import instincts from others |
 
 ## Configuration
 

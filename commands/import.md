@@ -1,23 +1,23 @@
 ---
-name: instinct-import
+name: import
 description: Import instincts from teammates, Skill Creator, or other sources
 command: true
 ---
 
-# Instinct Import Command
+# Import Command
 
 ## Implementation
 
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <file-or-url>
+python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py import <file-or-url>
 ```
 
 Import instincts from:
@@ -29,9 +29,9 @@ Import instincts from:
 ## Usage
 
 ```
-/instinct-import team-instincts.yaml
-/instinct-import https://github.com/org/repo/instincts.yaml
-/instinct-import --from-skill-creator acme/webapp
+/import team-instincts.yaml
+/import https://github.com/org/repo/instincts.yaml
+/import --from-skill-creator acme/webapp
 ```
 
 ## What to Do
@@ -110,7 +110,7 @@ original_source: "session-observation"  # or "repo-analysis"
 When importing from Skill Creator:
 
 ```
-/instinct-import --from-skill-creator acme/webapp
+/import --from-skill-creator acme/webapp
 ```
 
 This fetches instincts generated from repo analysis:
@@ -138,5 +138,5 @@ Skipped: 3 instincts (2 duplicates, 1 conflict)
 
 New instincts saved to: ~/.claude/homunculus/instincts/inherited/
 
-Run /instinct-status to see all instincts.
+Run /status to see all instincts.
 ```

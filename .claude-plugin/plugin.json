@@ -15,6 +15,6 @@
     "automation",
     "knowledge-evolution"
   ],
-  "skills": ["./skills/continuous-learning-v2/"],
-  "agents": ["./skills/continuous-learning-v2/agents/observer.md"]
+  "skills": ["./skills/learning-instinct/"],
+  "agents": ["./skills/learning-instinct/agents/observer.md"]
 }

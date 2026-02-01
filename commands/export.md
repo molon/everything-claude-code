@@ -1,10 +1,10 @@
 ---
-name: instinct-export
+name: export
 description: Export instincts for sharing with teammates or other projects
-command: /instinct-export
+command: /export
 ---
 
-# Instinct Export Command
+# Export Command
 
 Exports instincts to a shareable format. Perfect for:
 - Sharing with teammates
@@ -14,10 +14,10 @@ Exports instincts to a shareable format. Perfect for:
 ## Usage
 
 ```
-/instinct-export                           # Export all personal instincts
-/instinct-export --domain testing          # Export only testing instincts
-/instinct-export --min-confidence 0.7      # Only export high-confidence instincts
-/instinct-export --output team-instincts.yaml
+/export                           # Export all personal instincts
+/export --domain testing          # Export only testing instincts
+/export --min-confidence 0.7      # Only export high-confidence instincts
+/export --output team-instincts.yaml
 ```
 
 ## What to Do
@@ -41,7 +41,7 @@ Creates a YAML file:
 # Count: 12 instincts
 
 version: "2.0"
-exported_by: "continuous-learning-v2"
+exported_by: "learning-instinct"
 export_date: "2025-01-22T10:30:00Z"
 
 instincts:

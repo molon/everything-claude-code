@@ -1,10 +1,10 @@
 ---
-name: instinct-status
+name: status
 description: Show all learned instincts with their confidence levels
 command: true
 ---
 
-# Instinct Status Command
+# Status Command
 
 Shows all learned instincts with their confidence scores, grouped by domain.
 
@@ -13,21 +13,21 @@ Shows all learned instincts with their confidence scores, grouped by domain.
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" status
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" status
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation), use:
 
 ```bash
-python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py status
+python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py status
 ```
 
 ## Usage
 
 ```
-/instinct-status
-/instinct-status --domain code-style
-/instinct-status --low-confidence
+/status
+/status --domain code-style
+/status --low-confidence
 ```
 
 ## What to Do
