@@ -15,6 +15,13 @@
     "automation",
     "knowledge-evolution"
   ],
-  "skills": ["./skills/learning-instinct/"],
+  "skills": [
+    "./skills/learning-instinct/",
+    "./skills/evolve/",
+    "./skills/import/",
+    "./skills/export/",
+    "./skills/status/",
+    "./skills/install-opencode/"
+  ],
   "agents": ["./skills/learning-instinct/agents/observer.md"]
 }
