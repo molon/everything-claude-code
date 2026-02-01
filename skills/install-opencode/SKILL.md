@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Installs the opencode CLI tool if not already present on the system.
 
+For official installation instructions, see: https://opencode.ai/docs/#install
+
 ## Check if Already Installed
 
 Before attempting installation:
@@ -22,13 +24,19 @@ opencode --version
 
 ## Installation
 
-OpenCode is typically installed via npm:
+**Recommended: Install via official installer script**
+
+```bash
+curl -fsSL https://opencode.ai/install | bash
+```
+
+This is the official installation method and works across all platforms.
+
+**Alternative: Install via npm**
 
 ```bash
 npm install -g opencode
 ```
-
-Alternative installation methods:
 
 **Via yarn:**
 ```bash
@@ -54,23 +62,30 @@ If verification succeeds, opencode is ready to use.
 
 ## Troubleshooting
 
-**Permission denied (npm global install):**
+**Permission denied with installer script:**
 ```bash
-# Use sudo (not recommended)
-sudo npm install -g opencode
+# Try with sudo
+curl -fsSL https://opencode.ai/install | sudo bash
+```
 
-# Or fix npm permissions (recommended)
+**Command not found after install:**
+The installer should handle PATH automatically. If `opencode` is still not found:
+
+```bash
+# Check common locations
+echo $PATH | grep -o "[^:]*"
+
+# Add to PATH if needed (add to ~/.zshrc or ~/.bashrc)
+export PATH="$HOME/.opencode/bin:$PATH"
+```
+
+**For npm-based installation issues:**
+```bash
+# Fix npm permissions (recommended)
 mkdir -p ~/.npm-global
 npm config set prefix '~/.npm-global'
 export PATH=~/.npm-global/bin:$PATH
 npm install -g opencode
-```
-
-**Command not found after install:**
-Check npm global bin directory and add to PATH:
-```bash
-npm config get prefix
-# Add <prefix>/bin to your PATH in ~/.zshrc or ~/.bashrc
 ```
 
 ## Usage Examples
