@@ -1,104 +1,60 @@
 ---
 name: install-opencode
-description: Install opencode CLI if not already installed and verify installation. Use when user needs opencode CLI functionality for code analysis, generation, or other tasks.
+description: Use when user needs opencode CLI functionality for code analysis, generation, or other tasks, or when opencode command is not found
 disable-model-invocation: true
 ---
 
 # Install OpenCode
 
-Installs the opencode CLI tool if not already present on the system.
+## Overview
 
-For official installation instructions, see: https://opencode.ai/docs/#install
+Install opencode CLI using the official installer script and verify installation works.
 
-## Check if Already Installed
+## Official Documentation
 
-Before attempting installation:
+**https://opencode.ai/docs/#install**
 
-```bash
-which opencode
-opencode --version
-```
-
-- If `opencode` is found and version shows: Already installed, skip installation
-- If command not found: Proceed with installation
+Always reference official docs for the most current installation instructions.
 
 ## Installation
-
-**Recommended: Install via official installer script**
 
 ```bash
 curl -fsSL https://opencode.ai/install | bash
 ```
 
-This is the official installation method and works across all platforms.
+This is the official installation method. The installer handles PATH automatically.
 
-**Alternative: Install via npm**
-
+**Permission denied?**
 ```bash
-npm install -g opencode
-```
-
-**Via yarn:**
-```bash
-yarn global add opencode
-```
-
-**Via pnpm:**
-```bash
-pnpm add -g opencode
+curl -fsSL https://opencode.ai/install | sudo bash
 ```
 
 ## Verification
 
-After installation, verify with a simple test:
+**After installation, always verify with a test:**
 
 ```bash
 opencode run "what is 2+2" --model opencode/big-pickle
 ```
 
-**Expected output:** The answer should be "4" or equivalent.
+**Expected output:** "4" or equivalent
 
-If verification succeeds, opencode is ready to use.
+Only after seeing correct output, confirm installation succeeded.
 
 ## Troubleshooting
 
-**Permission denied with installer script:**
-```bash
-# Try with sudo
-curl -fsSL https://opencode.ai/install | sudo bash
-```
-
 **Command not found after install:**
-The installer should handle PATH automatically. If `opencode` is still not found:
+
+The installer should add `~/.opencode/bin` to PATH automatically. If `opencode` is still not found:
 
 ```bash
-# Check common locations
-echo $PATH | grep -o "[^:]*"
+# Check if it exists
+ls ~/.opencode/bin/opencode
 
-# Add to PATH if needed (add to ~/.zshrc or ~/.bashrc)
+# Add to PATH (add to ~/.zshrc or ~/.bashrc)
 export PATH="$HOME/.opencode/bin:$PATH"
 ```
 
-**For npm-based installation issues:**
-```bash
-# Fix npm permissions (recommended)
-mkdir -p ~/.npm-global
-npm config set prefix '~/.npm-global'
-export PATH=~/.npm-global/bin:$PATH
-npm install -g opencode
-```
+**Installer script fails?**
 
-## Usage Examples
-
-Once installed, opencode can be used for various tasks:
-
-```bash
-# Basic code generation
-opencode run "write a function to reverse a string"
-
-# Specific model
-opencode run "explain this code" --model opencode/big-pickle
-
-# File input
-opencode run "review this code" --input myfile.js
-```
+Check official docs for alternative installation methods: https://opencode.ai/docs/#install
