@@ -1,40 +1,20 @@
 {
-  "name": "everything-claude-code",
-  "version": "1.2.0",
-  "description": "Complete collection of battle-tested Claude Code configs from an Anthropic hackathon winner - agents, skills, hooks, and rules evolved over 10+ months of intensive daily use",
+  "name": "instinct",
+  "version": "1.0.0",
+  "description": "Instinct-based learning system for Claude Code - observes sessions, creates atomic behaviors with confidence scoring, and evolves them into reusable knowledge",
   "author": {
-    "name": "Affaan Mustafa",
-    "url": "https://x.com/affaanmustafa"
+    "name": "Your Name"
   },
-  "homepage": "https://github.com/affaan-m/everything-claude-code",
-  "repository": "https://github.com/affaan-m/everything-claude-code",
+  "homepage": "https://github.com/yourusername/instinct",
+  "repository": "https://github.com/yourusername/instinct",
   "license": "MIT",
   "keywords": [
-    "claude-code",
-    "agents",
-    "skills",
-    "hooks",
-    "rules",
-    "tdd",
-    "code-review",
-    "security",
-    "workflow",
+    "continuous-learning",
+    "instincts",
+    "pattern-detection",
     "automation",
-    "best-practices"
+    "knowledge-evolution"
   ],
-  "skills": ["./skills/", "./commands/"],
-  "agents": [
-    "./agents/architect.md",
-    "./agents/build-error-resolver.md",
-    "./agents/code-reviewer.md",
-    "./agents/database-reviewer.md",
-    "./agents/doc-updater.md",
-    "./agents/e2e-runner.md",
-    "./agents/go-build-resolver.md",
-    "./agents/go-reviewer.md",
-    "./agents/planner.md",
-    "./agents/refactor-cleaner.md",
-    "./agents/security-reviewer.md",
-    "./agents/tdd-guide.md"
-  ]
+  "skills": ["./skills/continuous-learning-v2/"],
+  "agents": ["./skills/continuous-learning-v2/agents/observer.md"]
 }

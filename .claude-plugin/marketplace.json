@@ -1,43 +1,35 @@
 {
-  "name": "everything-claude-code",
+  "name": "instinct",
   "owner": {
-    "name": "Affaan Mustafa",
-    "email": "affaan@example.com"
+    "name": "Your Name"
   },
   "metadata": {
-    "description": "Battle-tested Claude Code configurations from an Anthropic hackathon winner"
+    "description": "Instinct-based learning system for Claude Code"
   },
   "plugins": [
     {
-      "name": "everything-claude-code",
+      "name": "instinct",
       "source": "./",
-      "description": "Complete collection of agents, skills, hooks, commands, and rules evolved over 10+ months of intensive daily use",
+      "description": "Instinct-based learning system - observes sessions, creates atomic behaviors with confidence scoring, and evolves them into reusable knowledge",
       "author": {
-        "name": "Affaan Mustafa"
+        "name": "Your Name"
       },
-      "homepage": "https://github.com/affaan-m/everything-claude-code",
-      "repository": "https://github.com/affaan-m/everything-claude-code",
+      "homepage": "https://github.com/yourusername/instinct",
+      "repository": "https://github.com/yourusername/instinct",
       "license": "MIT",
       "keywords": [
-        "agents",
-        "skills",
-        "hooks",
-        "commands",
-        "tdd",
-        "code-review",
-        "security",
-        "best-practices"
+        "continuous-learning",
+        "instincts",
+        "pattern-detection",
+        "automation",
+        "knowledge-evolution"
       ],
-      "category": "workflow",
+      "category": "productivity",
       "tags": [
-        "agents",
-        "skills",
-        "hooks",
-        "commands",
-        "tdd",
-        "code-review",
-        "security",
-        "best-practices"
+        "learning",
+        "instincts",
+        "patterns",
+        "automation"
       ]
     }
   ]
