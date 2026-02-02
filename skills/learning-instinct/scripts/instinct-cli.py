@@ -168,8 +168,8 @@ def cmd_status(_args):
             if action_match:
                 action = action_match.group(1).strip().split('\n')[0]
                 truncated = (
-                action[:57] + '...' if len(action) > 60 else action
-            )
+                    action[:57] + '...' if len(action) > 60 else action
+                )
                 print(f"            action: {truncated}")
 
             print()
@@ -423,8 +423,8 @@ def cmd_evolve(args):
     skill_candidates = []
     for trigger, cluster in trigger_clusters.items():
         if len(cluster) >= 2:
-            avg_conf = sum(i.get('confidence', 0.5)
-                          for i in cluster) / len(cluster)
+            avg_conf = (sum(i.get('confidence', 0.5)
+                        for i in cluster) / len(cluster))
             skill_candidates.append({
                 'trigger': trigger,
                 'instincts': cluster,
@@ -448,7 +448,7 @@ def cmd_evolve(args):
             print(f"   Instincts: {len(cand['instincts'])}")
             print(f"   Avg confidence: {cand['avg_confidence']:.0%}")
             print(f"   Domains: {', '.join(cand['domains'])}")
-            print(f"   Instincts:")
+            print("   Instincts:")
             for inst in cand['instincts'][:3]:
                 print(f"     - {inst.get('id')}")
             print()

@@ -18,32 +18,39 @@ Add to your `~/.claude/settings.json`:
 ```json
 {
   "hooks": {
-    "PreToolUse": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh pre"
-      }]
-    }],
-    "PostToolUse": [{
-      "matcher": "*",
-      "hooks": [{
-        "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh post"
-      }]
-    }]
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh pre"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh post"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `/skill-create` | Analyze git history to generate skills |
+| Command   | Description                            |
+| --------- | -------------------------------------- |
 | `/status` | View learned instincts with confidence |
-| `/import` | Import instincts from file |
-| `/export` | Export your instincts |
+| `/import` | Import instincts from file             |
+| `/export` | Export your instincts                  |
 | `/evolve` | Cluster instincts into skills/commands |
 
 ## How It Works

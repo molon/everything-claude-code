@@ -7,6 +7,7 @@ disable-model-invocation: true
 # Evolve Instincts
 
 Analyzes instincts and clusters related ones into higher-level structures:
+
 - **Commands**: When instincts describe user-invoked actions
 - **Skills**: When instincts describe auto-triggered behaviors
 - **Agents**: When instincts describe complex, multi-step processes
@@ -25,24 +26,27 @@ Analyzes instincts and clusters related ones into higher-level structures:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" evolve [--generate]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" evolve [--generate]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py evolve [--generate]
+python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py evolve [--generate]
 ```
 
 ## Evolution Rules
 
 ### → Command (User-Invoked)
+
 When instincts describe actions a user would explicitly request:
+
 - Multiple instincts about "when user asks to..."
 - Instincts with triggers like "when creating a new X"
 - Instincts that follow a repeatable sequence
 
 Example:
+
 - `new-table-step1`: "when adding a database table, create migration"
 - `new-table-step2`: "when adding a database table, update schema"
 - `new-table-step3`: "when adding a database table, regenerate types"
@@ -50,12 +54,15 @@ Example:
 → Creates: `/new-table` command
 
 ### → Skill (Auto-Triggered)
+
 When instincts describe behaviors that should happen automatically:
+
 - Pattern-matching triggers
 - Error handling responses
 - Code style enforcement
 
 Example:
+
 - `prefer-functional`: "when writing functions, prefer functional style"
 - `use-immutable`: "when modifying state, use immutable patterns"
 - `avoid-classes`: "when designing modules, avoid class-based design"
@@ -63,12 +70,15 @@ Example:
 → Creates: `functional-patterns` skill
 
 ### → Agent (Needs Depth/Isolation)
+
 When instincts describe complex, multi-step processes that benefit from isolation:
+
 - Debugging workflows
 - Refactoring sequences
 - Research tasks
 
 Example:
+
 - `debug-step1`: "when debugging, first check logs"
 - `debug-step2`: "when debugging, isolate the failing component"
 - `debug-step3`: "when debugging, create minimal reproduction"
@@ -141,20 +151,25 @@ Run `/evolve --execute` to create these files.
 When evolving instincts into a new skill:
 
 1. **Check for superpowers:writing-skills**
+
    ```bash
    ls ~/.claude/plugins/cache/*/skills/writing-skills/SKILL.md 2>/dev/null
    ```
+
    - If found: Use Skill tool to invoke it and follow TDD-based process
    - Priority: **Higher** (TDD approach, more rigorous)
 
 2. **Fallback to skill-creator**
+
    ```bash
    ls ~/.claude/plugins/cache/*/skills/skill-creator/SKILL.md 2>/dev/null
    ```
+
    - If found: Invoke and follow its creation process
    - Priority: **Lower** (standard skill creation)
 
 3. **Error if neither available**
+
    ```
    ❌ Error: No skill creation tool found
 
@@ -166,11 +181,13 @@ When evolving instincts into a new skill:
    https://github.com/obra/superpowers
    https://github.com/anthropics/skills
    ```
+
    - Stop execution and report error to user
 
 ## Generated File Format
 
 ### Command
+
 ```markdown
 ---
 name: new-table
@@ -188,6 +205,7 @@ evolved_from:
 ```
 
 ### Skill
+
 ```markdown
 ---
 name: functional-patterns
@@ -204,6 +222,7 @@ evolved_from:
 ```
 
 ### Agent
+
 ```markdown
 ---
 name: debugger

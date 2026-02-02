@@ -13,11 +13,13 @@
 ## Task 1: Remove skill-create Command
 
 **Files:**
+
 - Delete: `commands/skill-create.md`
 
 **Step 1: Delete skill-create command**
 
 Run:
+
 ```bash
 rm commands/skill-create.md
 ```
@@ -27,6 +29,7 @@ Expected: File removed, no error
 **Step 2: Verify deletion**
 
 Run:
+
 ```bash
 ls commands/
 git status
@@ -46,11 +49,13 @@ git commit -m "refactor: remove skill-create command"
 ## Task 2: Create evolve Skill
 
 **Files:**
+
 - Create: `skills/evolve/SKILL.md`
 
 **Step 1: Create evolve skill directory**
 
 Run:
+
 ```bash
 mkdir -p skills/evolve
 ```
@@ -69,42 +74,47 @@ disable-model-invocation: true
 # Evolve Instincts
 
 Analyzes instincts and clusters related ones into higher-level structures:
+
 - **Commands**: When instincts describe user-invoked actions
 - **Skills**: When instincts describe auto-triggered behaviors
 - **Agents**: When instincts describe complex, multi-step processes
 
 ## Usage
+```
 
-```
-/evolve                    # Analyze all instincts and suggest evolutions
-/evolve --domain testing   # Only evolve instincts in testing domain
-/evolve --dry-run          # Show what would be created without creating
-/evolve --threshold 5      # Require 5+ related instincts to cluster
-```
+/evolve # Analyze all instincts and suggest evolutions
+/evolve --domain testing # Only evolve instincts in testing domain
+/evolve --dry-run # Show what would be created without creating
+/evolve --threshold 5 # Require 5+ related instincts to cluster
+
+````
 
 ## Implementation
 
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" evolve [--generate]
-```
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" evolve [--generate]
+````
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py evolve [--generate]
+python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py evolve [--generate]
 ```
 
 ## Evolution Rules
 
 ### → Command (User-Invoked)
+
 When instincts describe actions a user would explicitly request:
+
 - Multiple instincts about "when user asks to..."
 - Instincts with triggers like "when creating a new X"
 - Instincts that follow a repeatable sequence
 
 Example:
+
 - `new-table-step1`: "when adding a database table, create migration"
 - `new-table-step2`: "when adding a database table, update schema"
 - `new-table-step3`: "when adding a database table, regenerate types"
@@ -112,12 +122,15 @@ Example:
 → Creates: `/new-table` command
 
 ### → Skill (Auto-Triggered)
+
 When instincts describe behaviors that should happen automatically:
+
 - Pattern-matching triggers
 - Error handling responses
 - Code style enforcement
 
 Example:
+
 - `prefer-functional`: "when writing functions, prefer functional style"
 - `use-immutable`: "when modifying state, use immutable patterns"
 - `avoid-classes`: "when designing modules, avoid class-based design"
@@ -125,12 +138,15 @@ Example:
 → Creates: `functional-patterns` skill
 
 ### → Agent (Needs Depth/Isolation)
+
 When instincts describe complex, multi-step processes that benefit from isolation:
+
 - Debugging workflows
 - Refactoring sequences
 - Research tasks
 
 Example:
+
 - `debug-step1`: "when debugging, first check logs"
 - `debug-step2`: "when debugging, isolate the failing component"
 - `debug-step3`: "when debugging, create minimal reproduction"
@@ -203,20 +219,25 @@ Run `/evolve --execute` to create these files.
 When evolving instincts into a new skill:
 
 1. **Check for superpowers:writing-skills**
+
    ```bash
    ls ~/.claude/plugins/cache/*/skills/writing-skills/SKILL.md 2>/dev/null
    ```
+
    - If found: Use Skill tool to invoke it and follow TDD-based process
    - Priority: **Higher** (TDD approach, more rigorous)
 
 2. **Fallback to skill-creator**
+
    ```bash
    ls ~/.claude/plugins/cache/*/skills/skill-creator/SKILL.md 2>/dev/null
    ```
+
    - If found: Invoke and follow its creation process
    - Priority: **Lower** (standard skill creation)
 
 3. **Error if neither available**
+
    ```
    ❌ Error: No skill creation tool found
 
@@ -228,11 +249,13 @@ When evolving instincts into a new skill:
    https://github.com/obra/superpowers
    https://github.com/anthropics/skills
    ```
+
    - Stop execution and report error to user
 
 ## Generated File Format
 
 ### Command
+
 ```markdown
 ---
 name: new-table
@@ -250,6 +273,7 @@ evolved_from:
 ```
 
 ### Skill
+
 ```markdown
 ---
 name: functional-patterns
@@ -266,6 +290,7 @@ evolved_from:
 ```
 
 ### Agent
+
 ```markdown
 ---
 name: debugger
@@ -281,14 +306,15 @@ evolved_from:
 
 [Generated content based on clustered instincts]
 ```
-```
+
+````
 
 **Step 3: Verify file created**
 
 Run:
 ```bash
 cat skills/evolve/SKILL.md | head -20
-```
+````
 
 Expected: YAML frontmatter with name, description, disable-model-invocation
 
@@ -304,11 +330,13 @@ git commit -m "feat: create evolve skill with skill creation tool detection"
 ## Task 3: Simplify evolve Command
 
 **Files:**
+
 - Modify: `commands/evolve.md`
 
 **Step 1: Backup original command**
 
 Run:
+
 ```bash
 cp commands/evolve.md commands/evolve.md.bak
 ```
@@ -330,6 +358,7 @@ Invoke the instinct:evolve skill and follow it exactly as presented to you.
 **Step 3: Verify change**
 
 Run:
+
 ```bash
 cat commands/evolve.md
 ```
@@ -339,6 +368,7 @@ Expected: Only 3 lines of YAML frontmatter + 1 invocation line
 **Step 4: Remove backup**
 
 Run:
+
 ```bash
 rm commands/evolve.md.bak
 ```
@@ -355,11 +385,13 @@ git commit -m "refactor: simplify evolve command to delegate to skill"
 ## Task 4: Create import Skill
 
 **Files:**
+
 - Create: `skills/import/SKILL.md`
 
 **Step 1: Read original command for reference**
 
 Run:
+
 ```bash
 cat commands/import.md
 ```
@@ -367,6 +399,7 @@ cat commands/import.md
 **Step 2: Create import skill directory**
 
 Run:
+
 ```bash
 mkdir -p skills/import
 ```
@@ -385,31 +418,33 @@ disable-model-invocation: true
 # Import Instincts
 
 Import instincts from:
+
 - Teammates' exports
 - Skill Creator (repo analysis)
 - Community collections
 - Previous machine backups
 
 ## Usage
-
 ```
+
 /import team-instincts.yaml
 /import https://github.com/org/repo/instincts.yaml
 /import --from-skill-creator acme/webapp
-```
+
+````
 
 ## Implementation
 
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py import <file-or-url>
+python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py import <file-or-url>
 ```
 
 ## What to Do
@@ -462,13 +497,17 @@ Import 8 new, update 1, skip 3?
 ## Merge Strategies
 
 ### For Duplicates
+
 When importing an instinct that matches an existing one:
+
 - **Higher confidence wins**: Keep the one with higher confidence
 - **Merge evidence**: Combine observation counts
 - **Update timestamp**: Mark as recently validated
 
 ### For Conflicts
+
 When importing an instinct that contradicts an existing one:
+
 - **Skip by default**: Don't import conflicting instincts
 - **Flag for review**: Mark both as needing attention
 - **Manual resolution**: User decides which to keep
@@ -476,11 +515,12 @@ When importing an instinct that contradicts an existing one:
 ## Source Tracking
 
 Imported instincts are marked with:
+
 ```yaml
 source: "inherited"
 imported_from: "team-instincts.yaml"
 imported_at: "2025-01-22T10:30:00Z"
-original_source: "session-observation"  # or "repo-analysis"
+original_source: "session-observation" # or "repo-analysis"
 ```
 
 ## Skill Creator Integration
@@ -492,6 +532,7 @@ When importing from Skill Creator:
 ```
 
 This fetches instincts generated from repo analysis:
+
 - Source: `repo-analysis`
 - Higher initial confidence (0.7+)
 - Linked to source repository
@@ -507,6 +548,7 @@ This fetches instincts generated from repo analysis:
 ## Output
 
 After import:
+
 ```
 ✅ Import complete!
 
@@ -518,11 +560,13 @@ New instincts saved to: ~/.claude/homunculus/instincts/inherited/
 
 Run /status to see all instincts.
 ```
-```
+
+````
 
 **Step 4: Verify file created**
 
 Run:
+
 ```bash
 cat skills/import/SKILL.md | head -10
 ```
@@ -539,6 +583,7 @@ git commit -m "feat: create import skill"
 ## Task 5: Simplify import Command
 
 **Files:**
+
 - Modify: `commands/import.md`
 
 **Step 1: Replace with simplified content**
@@ -558,6 +603,7 @@ Invoke the instinct:import skill and follow it exactly as presented to you.
 **Step 2: Verify change**
 
 Run:
+
 ```bash
 cat commands/import.md
 ```
@@ -574,11 +620,13 @@ git commit -m "refactor: simplify import command to delegate to skill"
 ## Task 6: Create export Skill
 
 **Files:**
+
 - Create: `skills/export/SKILL.md`
 
 **Step 1: Read original command**
 
 Run:
+
 ```bash
 cat commands/export.md
 ```
@@ -586,6 +634,7 @@ cat commands/export.md
 **Step 2: Create export skill directory and file**
 
 Run:
+
 ```bash
 mkdir -p skills/export
 ```
@@ -602,32 +651,34 @@ disable-model-invocation: true
 # Export Instincts
 
 Export learned instincts for:
+
 - Sharing with teammates
 - Creating backups
 - Contributing to community collections
 - Migrating to new machines
 
 ## Usage
+```
 
-```
-/export                    # Export all instincts to YAML
+/export # Export all instincts to YAML
 /export --output my-instincts.yaml
-/export --domain testing   # Only export testing instincts
+/export --domain testing # Only export testing instincts
 /export --min-confidence 0.7
-```
+
+````
 
 ## Implementation
 
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set:
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py export
+python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py export
 ```
 
 ## What to Do
@@ -645,7 +696,6 @@ exported_at: "2025-01-22T10:30:00Z"
 exported_by: "username"
 plugin_version: "1.0.0"
 ---
-
 instincts:
   - id: prefer-grep-before-edit
     trigger: "when searching for code to modify"
@@ -674,6 +724,7 @@ instincts:
 ## Output
 
 After export:
+
 ```
 ✅ Export complete!
 
@@ -699,7 +750,8 @@ Share with: teammates, project documentation, or community
 - `--source <personal|inherited|team>`: Filter by source
 - `--min-confidence <n>`: Only export instincts above threshold
 - `--format <yaml|json>`: Output format (default: yaml)
-```
+
+````
 
 **Step 3: Commit**
 
@@ -713,6 +765,7 @@ git commit -m "feat: create export skill"
 ## Task 7: Simplify export Command
 
 **Files:**
+
 - Modify: `commands/export.md`
 
 **Step 1: Replace with simplified content**
@@ -741,11 +794,13 @@ git commit -m "refactor: simplify export command to delegate to skill"
 ## Task 8: Create status Skill
 
 **Files:**
+
 - Create: `skills/status/SKILL.md`
 
 **Step 1: Read original command**
 
 Run:
+
 ```bash
 cat commands/status.md
 ```
@@ -753,6 +808,7 @@ cat commands/status.md
 **Step 2: Create status skill directory and file**
 
 Run:
+
 ```bash
 mkdir -p skills/status
 ```
@@ -771,26 +827,27 @@ disable-model-invocation: true
 View all learned instincts and their current state.
 
 ## Usage
+```
 
-```
-/status                    # Show all instincts
-/status --domain testing   # Only show testing instincts
-/status --sort confidence  # Sort by confidence level
-/status --stale            # Show instincts needing refresh
-```
+/status # Show all instincts
+/status --domain testing # Only show testing instincts
+/status --sort confidence # Sort by confidence level
+/status --stale # Show instincts needing refresh
+
+````
 
 ## Implementation
 
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" status [--filter OPTIONS]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" status [--filter OPTIONS]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set:
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py status
+python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py status
 ```
 
 ## What to Do
@@ -851,7 +908,8 @@ Run /evolve to cluster related instincts into skills/agents.
 - `--min-confidence <n>`: Show only instincts above threshold
 - `--stale`: Show instincts needing attention
 - `--sort <confidence|recent|alpha>`: Sort order
-```
+
+````
 
 **Step 3: Commit**
 
@@ -865,6 +923,7 @@ git commit -m "feat: create status skill"
 ## Task 9: Simplify status Command
 
 **Files:**
+
 - Modify: `commands/status.md`
 
 **Step 1: Replace with simplified content**
@@ -893,11 +952,13 @@ git commit -m "refactor: simplify status command to delegate to skill"
 ## Task 10: Create install-opencode Skill
 
 **Files:**
+
 - Create: `skills/install-opencode/SKILL.md`
 
 **Step 1: Create skill directory**
 
 Run:
+
 ```bash
 mkdir -p skills/install-opencode
 ```
@@ -906,7 +967,7 @@ mkdir -p skills/install-opencode
 
 Create `skills/install-opencode/SKILL.md`:
 
-```markdown
+````markdown
 ---
 name: install-opencode
 description: Install opencode CLI if not already installed and verify installation. Use when user needs opencode CLI functionality for code analysis, generation, or other tasks.
@@ -924,15 +985,18 @@ OpenCode is typically installed via npm:
 ```bash
 npm install -g opencode
 ```
+````
 
 Alternative installation methods:
 
 **Via yarn:**
+
 ```bash
 yarn global add opencode
 ```
 
 **Via pnpm:**
+
 ```bash
 pnpm add -g opencode
 ```
@@ -964,6 +1028,7 @@ opencode --version
 ## Troubleshooting
 
 **Permission denied (npm global install):**
+
 ```bash
 # Use sudo (not recommended)
 sudo npm install -g opencode
@@ -977,6 +1042,7 @@ npm install -g opencode
 
 **Command not found after install:**
 Check npm global bin directory and add to PATH:
+
 ```bash
 npm config get prefix
 # Add <prefix>/bin to your PATH in ~/.zshrc or ~/.bashrc
@@ -996,14 +1062,15 @@ opencode run "explain this code" --model opencode/big-pickle
 # File input
 opencode run "review this code" --input myfile.js
 ```
-```
+
+````
 
 **Step 3: Verify file created**
 
 Run:
 ```bash
 cat skills/install-opencode/SKILL.md | head -20
-```
+````
 
 **Step 4: Commit**
 
@@ -1017,11 +1084,13 @@ git commit -m "feat: create install-opencode skill"
 ## Task 11: Update plugin.json
 
 **Files:**
+
 - Modify: `.claude-plugin/plugin.json`
 
 **Step 1: Read current plugin.json**
 
 Run:
+
 ```bash
 cat .claude-plugin/plugin.json
 ```
@@ -1029,6 +1098,7 @@ cat .claude-plugin/plugin.json
 **Step 2: Update skills array**
 
 The current plugin.json has:
+
 ```json
 {
   "skills": ["./skills/learning-instinct/"],
@@ -1037,6 +1107,7 @@ The current plugin.json has:
 ```
 
 Update to:
+
 ```json
 {
   "skills": [
@@ -1054,6 +1125,7 @@ Update to:
 **Step 3: Verify JSON is valid**
 
 Run:
+
 ```bash
 python3 -m json.tool .claude-plugin/plugin.json > /dev/null && echo "Valid JSON" || echo "Invalid JSON"
 ```
@@ -1072,16 +1144,19 @@ git commit -m "feat: register new skills in plugin.json"
 ## Task 12: Final Verification
 
 **Files:**
+
 - Verify all changes
 
 **Step 1: Verify all skills exist**
 
 Run:
+
 ```bash
 ls -la skills/
 ```
 
 Expected output should include:
+
 - `learning-instinct/`
 - `evolve/`
 - `import/`
@@ -1092,22 +1167,26 @@ Expected output should include:
 **Step 2: Verify all commands simplified**
 
 Run:
+
 ```bash
 for cmd in commands/*.md; do echo "=== $cmd ==="; cat "$cmd"; echo ""; done
 ```
 
 Expected: Each command file should have only:
+
 - YAML frontmatter (name, description, command: true)
 - One line: "Invoke the instinct:xxx skill..."
 
 **Step 3: Verify skill frontmatter**
 
 Run:
+
 ```bash
 for skill in skills/*/SKILL.md; do echo "=== $skill ==="; head -5 "$skill"; echo ""; done
 ```
 
 Expected: Each skill should have:
+
 - `name:` field
 - `description:` field starting with "Use when..."
 - `disable-model-invocation: true`
@@ -1115,6 +1194,7 @@ Expected: Each skill should have:
 **Step 4: Verify plugin.json includes all skills**
 
 Run:
+
 ```bash
 cat .claude-plugin/plugin.json | grep -A 10 '"skills"'
 ```
@@ -1124,6 +1204,7 @@ Expected: All 6 skills listed in skills array
 **Step 5: Test skill creation logic in evolve**
 
 Run:
+
 ```bash
 cat skills/evolve/SKILL.md | grep -A 20 "Skill Creation"
 ```
@@ -1142,11 +1223,13 @@ git commit -m "chore: final adjustments to commands-to-skills refactor"
 ## Task 13: Clean Up Old Files
 
 **Files:**
+
 - Verify cleanup
 
 **Step 1: Check for any leftover backup files**
 
 Run:
+
 ```bash
 find . -name "*.bak" -o -name "*~"
 ```
@@ -1156,6 +1239,7 @@ Expected: No backup files found
 **Step 2: Verify skill-create is gone**
 
 Run:
+
 ```bash
 ls commands/skill-create.md 2>&1
 ```
@@ -1165,6 +1249,7 @@ Expected: "No such file or directory"
 **Step 3: Check git status**
 
 Run:
+
 ```bash
 git status
 ```
@@ -1174,6 +1259,7 @@ Expected: Clean working directory (all changes committed)
 **Step 4: View commit history**
 
 Run:
+
 ```bash
 git log --oneline -10
 ```
@@ -1200,6 +1286,7 @@ After implementation, verify:
 ## Summary
 
 This plan refactors the instinct plugin to:
+
 1. Remove redundant skill-create functionality
 2. Convert commands to modular skills with delegation
 3. Add intelligent skill creation tool detection to evolve

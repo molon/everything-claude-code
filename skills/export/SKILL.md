@@ -7,6 +7,7 @@ disable-model-invocation: true
 # Export Instincts
 
 Export learned instincts for:
+
 - Sharing with teammates
 - Creating backups
 - Contributing to community collections
@@ -26,13 +27,13 @@ Export learned instincts for:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct-cli.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set:
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct-cli.py export
+python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py export
 ```
 
 ## What to Do
@@ -85,6 +86,7 @@ instincts:
 ## Privacy Considerations
 
 Exports include:
+
 - ✅ Trigger patterns
 - ✅ Actions
 - ✅ Confidence scores
@@ -92,6 +94,7 @@ Exports include:
 - ✅ Observation counts
 
 Exports do NOT include:
+
 - ❌ Actual code snippets
 - ❌ File paths
 - ❌ Session transcripts
@@ -108,6 +111,7 @@ Exports do NOT include:
 ## Output
 
 After export:
+
 ```
 ✅ Export complete!
 
