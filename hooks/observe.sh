@@ -11,25 +11,25 @@
 #   "hooks": {
 #     "PreToolUse": [{
 #       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh pre" }]
+#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/observe.sh pre" }]
 #     }],
 #     "PostToolUse": [{
 #       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/hooks/observe.sh post" }]
+#       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/observe.sh post" }]
 #     }]
 #   }
 # }
 #
-# If installed manually to ~/.claude/skills:
+# If installed manually to ~/.claude:
 # {
 #   "hooks": {
 #     "PreToolUse": [{
 #       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/learning-instinct/hooks/observe.sh pre" }]
+#       "hooks": [{ "type": "command", "command": "~/.claude/hooks/observe.sh pre" }]
 #     }],
 #     "PostToolUse": [{
 #       "matcher": "*",
-#       "hooks": [{ "type": "command", "command": "~/.claude/skills/learning-instinct/hooks/observe.sh post" }]
+#       "hooks": [{ "type": "command", "command": "~/.claude/hooks/observe.sh post" }]
 #     }]
 #   }
 # }
@@ -156,10 +156,12 @@ fi
 
 # Auto-start observer if not running (idempotent - start-observer.sh checks for existing instance)
 if [ "$observer_running" = false ]; then
-  if [ -n "${CLAUDE_PLUGIN_ROOT}" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/agents/start-observer.sh" ]; then
-    "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/agents/start-observer.sh" start >/dev/null 2>&1 &
-  elif [ -f "${HOME}/.claude/skills/learning-instinct/agents/start-observer.sh" ]; then
-    "${HOME}/.claude/skills/learning-instinct/agents/start-observer.sh" start >/dev/null 2>&1 &
+  if [ -n "${CLAUDE_PLUGIN_ROOT}" ] && [ -f "${CLAUDE_PLUGIN_ROOT}/agents/start-observer.sh" ]; then
+    "${CLAUDE_PLUGIN_ROOT}/agents/start-observer.sh" start >/dev/null 2>&1 &
+  elif [ -f "${HOME}/.claude/agents/start-observer.sh" ]; then
+    "${HOME}/.claude/agents/start-observer.sh" start >/dev/null 2>&1 &
+  elif [ -f "/usr/local/bin/start-observer.sh" ]; then
+    "/usr/local/bin/start-observer.sh" start >/dev/null 2>&1 &
   fi
   disown $! 2>/dev/null || true
 fi

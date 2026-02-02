@@ -271,27 +271,18 @@ def cmd_import(args):
             print(f"  ... and {len(duplicates) - 5} more")
 
     if args.dry_run:
-        print("\n[DRY RUN] No changes made.")
+        print("\n[dry-run] No changes made.")
         return 0
 
-    if not to_add and not to_update:
-        print("\nNothing to import.")
-        return 0
-
-    # Confirm
-    if not args.force:
-        response = (input(f"\nImport {len(to_add)} new, "
-                          f"update {len(to_update)}? [y/N] "))
+    if not args.force and (to_add or to_update):
+        response = input("\nProceed with import? (y/n) ")
         if response.lower() != 'y':
             print("Cancelled.")
             return 0
 
     # Write to inherited directory
-    timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-    if source.startswith('http') or source.startswith('https'):
-        source_name = 'web-import'
-    else:
-        source_name = Path(source).stem
+    timestamp = datetime.now().isoformat()
+    source_name = Path(source).stem
     output_file = INHERITED_DIR / f"{source_name}-{timestamp}.yaml"
 
     all_to_write = to_add + to_update
