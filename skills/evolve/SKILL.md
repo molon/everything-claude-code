@@ -26,13 +26,13 @@ Analyzes instincts and clusters related ones into higher-level structures:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" evolve [--generate]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" evolve [--generate]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py evolve [--generate]
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py evolve [--generate]
 ```
 
 ## Evolution Rules

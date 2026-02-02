@@ -26,13 +26,13 @@ Import instincts from:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py import <file-or-url>
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py import <file-or-url>
 ```
 
 ## What to Do

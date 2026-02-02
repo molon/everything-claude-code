@@ -27,13 +27,13 @@ Export learned instincts for:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set:
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py export
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py export
 ```
 
 ## What to Do

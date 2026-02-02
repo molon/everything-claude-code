@@ -94,13 +94,13 @@ Analyzes instincts and clusters related ones into higher-level structures:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" evolve [--generate]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" evolve [--generate]
 ````
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py evolve [--generate]
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py evolve [--generate]
 ```
 
 ## Evolution Rules
@@ -438,13 +438,13 @@ Import instincts from:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py import <file-or-url>
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py import <file-or-url>
 ```
 
 ## What to Do
@@ -672,13 +672,13 @@ Export learned instincts for:
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" export [--output FILE] [--domain DOMAIN] [--min-confidence N]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set:
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py export
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py export
 ```
 
 ## What to Do
@@ -841,13 +841,13 @@ View all learned instincts and their current state.
 Run the instinct CLI using the plugin root path:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct_cli.py" status [--filter OPTIONS]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/learning-instinct/scripts/instinct.py" status [--filter OPTIONS]
 ```
 
 Or if `CLAUDE_PLUGIN_ROOT` is not set:
 
 ```bash
-python3 ~/.claude/skills/learning-instinct/scripts/instinct_cli.py status
+python3 ~/.claude/skills/learning-instinct/scripts/instinct.py status
 ```
 
 ## What to Do
