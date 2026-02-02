@@ -30,13 +30,14 @@ OBSERVATIONS_FILE = HOMUNCULUS_DIR / 'observations.jsonl'
 
 # Ensure directories exist
 for d in [PERSONAL_DIR, INHERITED_DIR,
-         EVOLVED_DIR / 'skills', EVOLVED_DIR / 'commands',
-         EVOLVED_DIR / 'agents']:
+          EVOLVED_DIR / 'skills', EVOLVED_DIR / 'commands',
+          EVOLVED_DIR / 'agents']:
     d.mkdir(parents=True, exist_ok=True)
 
 # ─────────────────────────────────────────────
 # Instinct Parser
 # ─────────────────────────────────────────────
+
 
 def parse_instinct_file(content: str) -> list[dict]:
     """Parse YAML-like instinct file format."""
@@ -99,7 +100,7 @@ def load_all_instincts() -> list[dict]:
                     inst['_source_file'] = str(file)
                     inst['_source_type'] = directory.name
                 instincts.extend(parsed)
-            except Exception as e:
+            except (OSError, ValueError) as e:
                 print(f"Warning: Failed to parse {file}: {e}",
                       file=sys.stderr)
 
@@ -110,13 +111,13 @@ def load_all_instincts() -> list[dict]:
 # Status Command
 # ─────────────────────────────────────────────
 
-def cmd_status(args):
+def cmd_status(_args):
     """Show status of all instincts."""
     instincts = load_all_instincts()
 
     if not instincts:
         print("No instincts found.")
-        print(f"\nInstinct directories:")
+        print("\nInstinct directories:")
         print(f"  Personal:  {PERSONAL_DIR}")
         print(f"  Inherited: {INHERITED_DIR}")
         return
@@ -145,13 +146,14 @@ def cmd_status(args):
         print(f"## {domain.upper()} ({len(domain_instincts)})")
         print()
 
-        for inst in sorted(domain_instincts,
-                              key=lambda x: -x.get('confidence', 0.5)):
+        for inst in sorted(
+                domain_instincts,
+                key=lambda x: -x.get('confidence', 0.5)
+        ):
             conf = inst.get('confidence', 0.5)
             conf_bar = ('█' * int(conf * 10) +
                         '░' * (10 - int(conf * 10)))
             trigger = inst.get('trigger', 'unknown trigger')
-            source = inst.get('source', 'unknown')
 
             print(f"  {conf_bar} {int(conf*100):3d}%  "
                   f"{inst.get('id', 'unnamed')}")
@@ -165,8 +167,9 @@ def cmd_status(args):
             )
             if action_match:
                 action = action_match.group(1).strip().split('\n')[0]
-                truncated = (action[:57] + '...'
-                           if len(action) > 60 else action)
+                truncated = (
+                action[:57] + '...' if len(action) > 60 else action
+            )
                 print(f"            action: {truncated}")
 
             print()
@@ -175,7 +178,7 @@ def cmd_status(args):
     if OBSERVATIONS_FILE.exists():
         with open(OBSERVATIONS_FILE, encoding='utf-8') as f:
             obs_count = sum(1 for _ in f)
-        print(f"─────────────────────────────────────────────────────────")
+        print("─────────────────────────────────────────────────────────")
         print(f"  Observations: {obs_count} events logged")
         print(f"  File: {OBSERVATIONS_FILE}")
 
@@ -196,7 +199,7 @@ def cmd_import(args):
         try:
             with urllib.request.urlopen(source) as response:
                 content = response.read().decode('utf-8')
-        except Exception as e:
+        except (urllib.error.URLError, UnicodeDecodeError) as e:
             print(f"Error fetching URL: {e}", file=sys.stderr)
             return 1
     else:
@@ -277,8 +280,8 @@ def cmd_import(args):
 
     # Confirm
     if not args.force:
-        response = input(f"\nImport {len(to_add)} new, "
-                              f"update {len(to_update)}? [y/N] ")
+        response = (input(f"\nImport {len(to_add)} new, "
+                          f"update {len(to_update)}? [y/N] "))
         if response.lower() != 'y':
             print("Cancelled.")
             return 0
@@ -314,7 +317,7 @@ def cmd_import(args):
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(output_content)
 
-    print(f"\n✅ Import complete!")
+    print("\n✅ Import complete!")
     print(f"   Added: {len(to_add)}")
     print(f"   Updated: {len(to_update)}")
     print(f"   Saved to: {output_file}")
@@ -412,7 +415,7 @@ def cmd_evolve(args):
         # Normalize trigger
         trigger_key = trigger.lower()
         for keyword in ['when', 'creating', 'writing', 'adding',
-                    'implementing', 'testing']:
+                        'implementing', 'testing']:
             trigger_key = trigger_key.replace(keyword, '').strip()
         trigger_clusters[trigger_key].append(inst)
 
@@ -426,8 +429,9 @@ def cmd_evolve(args):
                 'trigger': trigger,
                 'instincts': cluster,
                 'avg_confidence': avg_conf,
-                'domains': list(set(i.get('domain', 'general')
-                                for i in cluster))
+                'domains': list(
+                    set(i.get('domain', 'general') for i in cluster)
+                )
             })
 
     # Sort by cluster size and confidence
@@ -438,7 +442,7 @@ def cmd_evolve(args):
     print(f"\nPotential skill clusters found: {len(skill_candidates)}")
 
     if skill_candidates:
-        print(f"\n## SKILL CANDIDATES\n")
+        print("\n## SKILL CANDIDATES\n")
         for i, cand in enumerate(skill_candidates[:5], 1):
             print(f"{i}. Cluster: \"{cand['trigger']}\"")
             print(f"   Instincts: {len(cand['instincts'])}")
@@ -461,9 +465,9 @@ def cmd_evolve(args):
             # Suggest command name
             cmd_name = (
                 trigger.replace('when ', '')
-                        .replace('implementing ', '')
-                        .replace('a ', '')
-                        .replace(' ', '-')[:20]
+                .replace('implementing ', '')
+                .replace('a ', '')
+                .replace(' ', '-')[:20]
             )
             print(f"  /{cmd_name}")
             print(f"    From: {inst.get('id')}")
@@ -501,6 +505,7 @@ def cmd_evolve(args):
 # ─────────────────────────────────────────────
 
 def main():
+    """Main entry point for the Instinct CLI."""
     parser = argparse.ArgumentParser(
         description='Instinct CLI for Continuous Learning v2'
     )
@@ -509,7 +514,7 @@ def main():
     )
 
     # Status
-    status_parser = subparsers.add_parser(
+    subparsers.add_parser(
         'status', help='Show instinct status'
     )
 
