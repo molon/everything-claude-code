@@ -10,31 +10,29 @@ Commands:
 """
 
 import argparse
-import json
-import os
 import sys
 import re
 import urllib.request
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
-from typing import Optional
 
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
 
-HOMUNCULUS_DIR = Path.home() / ".claude" / "homunculus"
-INSTINCTS_DIR = HOMUNCULUS_DIR / "instincts"
-PERSONAL_DIR = INSTINCTS_DIR / "personal"
-INHERITED_DIR = INSTINCTS_DIR / "inherited"
-EVOLVED_DIR = HOMUNCULUS_DIR / "evolved"
-OBSERVATIONS_FILE = HOMUNCULUS_DIR / "observations.jsonl"
+HOMUNCULUS_DIR = Path.home() / '.claude' / 'homunculus'
+INSTINCTS_DIR = HOMUNCULUS_DIR / 'instincts'
+PERSONAL_DIR = INSTINCTS_DIR / 'personal'
+INHERITED_DIR = INSTINCTS_DIR / 'inherited'
+EVOLVED_DIR = HOMUNCULUS_DIR / 'evolved'
+OBSERVATIONS_FILE = HOMUNCULUS_DIR / 'observations.jsonl'
 
 # Ensure directories exist
-for d in [PERSONAL_DIR, INHERITED_DIR, EVOLVED_DIR / "skills", EVOLVED_DIR / "commands", EVOLVED_DIR / "agents"]:
+for d in [PERSONAL_DIR, INHERITED_DIR,
+         EVOLVED_DIR / 'skills', EVOLVED_DIR / 'commands',
+         EVOLVED_DIR / 'agents']:
     d.mkdir(parents=True, exist_ok=True)
-
 
 # ─────────────────────────────────────────────
 # Instinct Parser
@@ -102,7 +100,8 @@ def load_all_instincts() -> list[dict]:
                     inst['_source_type'] = directory.name
                 instincts.extend(parsed)
             except Exception as e:
-                print(f"Warning: Failed to parse {file}: {e}", file=sys.stderr)
+                print(f"Warning: Failed to parse {file}: {e}",
+                      file=sys.stderr)
 
     return instincts
 
@@ -146,27 +145,36 @@ def cmd_status(args):
         print(f"## {domain.upper()} ({len(domain_instincts)})")
         print()
 
-        for inst in sorted(domain_instincts, key=lambda x: -x.get('confidence', 0.5)):
+        for inst in sorted(domain_instincts,
+                              key=lambda x: -x.get('confidence', 0.5)):
             conf = inst.get('confidence', 0.5)
-            conf_bar = '█' * int(conf * 10) + '░' * (10 - int(conf * 10))
+            conf_bar = ('█' * int(conf * 10) +
+                        '░' * (10 - int(conf * 10)))
             trigger = inst.get('trigger', 'unknown trigger')
             source = inst.get('source', 'unknown')
 
-            print(f"  {conf_bar} {int(conf*100):3d}%  {inst.get('id', 'unnamed')}")
+            print(f"  {conf_bar} {int(conf*100):3d}%  "
+                  f"{inst.get('id', 'unnamed')}")
             print(f"            trigger: {trigger}")
 
             # Extract action from content
             content = inst.get('content', '')
-            action_match = re.search(r'## Action\s*\n\s*(.+?)(?:\n\n|\n##|$)', content, re.DOTALL)
+            action_match = re.search(
+                r'## Action\s*\n\s*(.+?)(?:\n\n|\\n##|$)',
+                content, re.DOTALL
+            )
             if action_match:
                 action = action_match.group(1).strip().split('\n')[0]
-                print(f"            action: {action[:60]}{'...' if len(action) > 60 else ''}")
+                truncated = (action[:57] + '...'
+                           if len(action) > 60 else action)
+                print(f"            action: {truncated}")
 
             print()
 
     # Observations stats
     if OBSERVATIONS_FILE.exists():
-        obs_count = sum(1 for _ in open(OBSERVATIONS_FILE))
+        with open(OBSERVATIONS_FILE, encoding='utf-8') as f:
+            obs_count = sum(1 for _ in f)
         print(f"─────────────────────────────────────────────────────────")
         print(f"  Observations: {obs_count} events logged")
         print(f"  File: {OBSERVATIONS_FILE}")
@@ -196,7 +204,8 @@ def cmd_import(args):
         if not path.exists():
             print(f"File not found: {path}", file=sys.stderr)
             return 1
-        content = path.read_text()
+        with open(path, encoding='utf-8') as f:
+            content = f.read()
 
     # Parse instincts
     new_instincts = parse_instinct_file(content)
@@ -219,9 +228,13 @@ def cmd_import(args):
         inst_id = inst.get('id')
         if inst_id in existing_ids:
             # Check if we should update
-            existing_inst = next((e for e in existing if e.get('id') == inst_id), None)
+            existing_inst = next(
+                (e for e in existing if e.get('id') == inst_id),
+                None
+            )
             if existing_inst:
-                if inst.get('confidence', 0) > existing_inst.get('confidence', 0):
+                if inst.get('confidence', 0) > existing_inst.get(
+                        'confidence', 0):
                     to_update.append(inst)
                 else:
                     duplicates.append(inst)
@@ -237,15 +250,18 @@ def cmd_import(args):
     if to_add:
         print(f"NEW ({len(to_add)}):")
         for inst in to_add:
-            print(f"  + {inst.get('id')} (confidence: {inst.get('confidence', 0.5):.2f})")
+            print(f"  + {inst.get('id')} "
+                  f"(confidence: {inst.get('confidence', 0.5):.2f})")
 
     if to_update:
         print(f"\nUPDATE ({len(to_update)}):")
         for inst in to_update:
-            print(f"  ~ {inst.get('id')} (confidence: {inst.get('confidence', 0.5):.2f})")
+            print(f"  ~ {inst.get('id')} "
+                  f"(confidence: {inst.get('confidence', 0.5):.2f})")
 
     if duplicates:
-        print(f"\nSKIP ({len(duplicates)} - already exists with equal/higher confidence):")
+        print(f"\nSKIP ({len(duplicates)} - "
+              "already exists with equal/higher confidence):")
         for inst in duplicates[:5]:
             print(f"  - {inst.get('id')}")
         if len(duplicates) > 5:
@@ -261,18 +277,26 @@ def cmd_import(args):
 
     # Confirm
     if not args.force:
-        response = input(f"\nImport {len(to_add)} new, update {len(to_update)}? [y/N] ")
+        response = input(f"\nImport {len(to_add)} new, "
+                              f"update {len(to_update)}? [y/N] ")
         if response.lower() != 'y':
             print("Cancelled.")
             return 0
 
     # Write to inherited directory
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-    source_name = Path(source).stem if not source.startswith('http') else 'web-import'
+    if source.startswith('http') or source.startswith('https'):
+        source_name = 'web-import'
+    else:
+        source_name = Path(source).stem
     output_file = INHERITED_DIR / f"{source_name}-{timestamp}.yaml"
 
     all_to_write = to_add + to_update
-    output_content = f"# Imported from {source}\n# Date: {datetime.now().isoformat()}\n\n"
+
+    output_content = (
+        f"# Imported from {source}\n"
+        f"# Date: {datetime.now().isoformat()}\n\n"
+    )
 
     for inst in all_to_write:
         output_content += "---\n"
@@ -280,20 +304,20 @@ def cmd_import(args):
         output_content += f"trigger: \"{inst.get('trigger', 'unknown')}\"\n"
         output_content += f"confidence: {inst.get('confidence', 0.5)}\n"
         output_content += f"domain: {inst.get('domain', 'general')}\n"
-        output_content += f"source: inherited\n"
+        output_content += "source: inherited\n"
         output_content += f"imported_from: \"{source}\"\n"
         if inst.get('source_repo'):
             output_content += f"source_repo: {inst.get('source_repo')}\n"
         output_content += "---\n\n"
-        output_content += inst.get('content', '') + "\n\n"
+        output_content += inst.get('content', '') + '\n\n'
 
-    output_file.write_text(output_content)
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(output_content)
 
     print(f"\n✅ Import complete!")
     print(f"   Added: {len(to_add)}")
     print(f"   Updated: {len(to_update)}")
     print(f"   Saved to: {output_file}")
-
     return 0
 
 
@@ -312,21 +336,28 @@ def cmd_export(args):
     # Filter by domain if specified
     if args.domain:
         instincts = [i for i in instincts if i.get('domain') == args.domain]
-
     # Filter by minimum confidence
     if args.min_confidence:
-        instincts = [i for i in instincts if i.get('confidence', 0.5) >= args.min_confidence]
+        instincts = [
+            i for i in instincts
+            if i.get('confidence', 0.5) >= args.min_confidence
+        ]
 
     if not instincts:
         print("No instincts match the criteria.")
         return 1
 
     # Generate output
-    output = f"# Instincts export\n# Date: {datetime.now().isoformat()}\n# Total: {len(instincts)}\n\n"
+    output = (
+        f"# Instincts export\n"
+        f"# Date: {datetime.now().isoformat()}\n"
+        f"# Total: {len(instincts)}\n\n"
+    )
 
     for inst in instincts:
         output += "---\n"
-        for key in ['id', 'trigger', 'confidence', 'domain', 'source', 'source_repo']:
+        for key in ['id', 'trigger', 'confidence', 'domain',
+                    'source', 'source_repo']:
             if inst.get(key):
                 value = inst[key]
                 if key == 'trigger':
@@ -334,11 +365,12 @@ def cmd_export(args):
                 else:
                     output += f"{key}: {value}\n"
         output += "---\n\n"
-        output += inst.get('content', '') + "\n\n"
+        output += inst.get('content', '') + '\n\n'
 
     # Write to file or stdout
     if args.output:
-        Path(args.output).write_text(output)
+        with open(args.output, 'w', encoding='utf-8') as f:
+            f.write(output)
         print(f"Exported {len(instincts)} instincts to {args.output}")
     else:
         print(output)
@@ -351,7 +383,7 @@ def cmd_export(args):
 # ─────────────────────────────────────────────
 
 def cmd_evolve(args):
-    """Analyze instincts and suggest evolutions to skills/commands/agents."""
+    """Analyze instincts and suggest evolutions."""
     instincts = load_all_instincts()
 
     if len(instincts) < 3:
@@ -379,7 +411,8 @@ def cmd_evolve(args):
         trigger = inst.get('trigger', '')
         # Normalize trigger
         trigger_key = trigger.lower()
-        for keyword in ['when', 'creating', 'writing', 'adding', 'implementing', 'testing']:
+        for keyword in ['when', 'creating', 'writing', 'adding',
+                    'implementing', 'testing']:
             trigger_key = trigger_key.replace(keyword, '').strip()
         trigger_clusters[trigger_key].append(inst)
 
@@ -387,16 +420,20 @@ def cmd_evolve(args):
     skill_candidates = []
     for trigger, cluster in trigger_clusters.items():
         if len(cluster) >= 2:
-            avg_conf = sum(i.get('confidence', 0.5) for i in cluster) / len(cluster)
+            avg_conf = sum(i.get('confidence', 0.5)
+                          for i in cluster) / len(cluster)
             skill_candidates.append({
                 'trigger': trigger,
                 'instincts': cluster,
                 'avg_confidence': avg_conf,
-                'domains': list(set(i.get('domain', 'general') for i in cluster))
+                'domains': list(set(i.get('domain', 'general')
+                                for i in cluster))
             })
 
     # Sort by cluster size and confidence
-    skill_candidates.sort(key=lambda x: (-len(x['instincts']), -x['avg_confidence']))
+    skill_candidates.sort(
+        key=lambda x: (-len(x['instincts']), -x['avg_confidence'])
+    )
 
     print(f"\nPotential skill clusters found: {len(skill_candidates)}")
 
@@ -412,26 +449,38 @@ def cmd_evolve(args):
                 print(f"     - {inst.get('id')}")
             print()
 
-    # Command candidates (workflow instincts with high confidence)
-    workflow_instincts = [i for i in instincts if i.get('domain') == 'workflow' and i.get('confidence', 0) >= 0.7]
+    # Command candidates (workflow instincts)
+    workflow_instincts = [
+        i for i in instincts
+        if i.get('domain') == 'workflow' and i.get('confidence', 0) >= 0.7
+    ]
     if workflow_instincts:
         print(f"\n## COMMAND CANDIDATES ({len(workflow_instincts)})\n")
         for inst in workflow_instincts[:5]:
             trigger = inst.get('trigger', 'unknown')
             # Suggest command name
-            cmd_name = trigger.replace('when ', '').replace('implementing ', '').replace('a ', '')
-            cmd_name = cmd_name.replace(' ', '-')[:20]
+            cmd_name = (
+                trigger.replace('when ', '')
+                        .replace('implementing ', '')
+                        .replace('a ', '')
+                        .replace(' ', '-')[:20]
+            )
             print(f"  /{cmd_name}")
             print(f"    From: {inst.get('id')}")
             print(f"    Confidence: {inst.get('confidence', 0.5):.0%}")
             print()
 
     # Agent candidates (complex multi-step patterns)
-    agent_candidates = [c for c in skill_candidates if len(c['instincts']) >= 3 and c['avg_confidence'] >= 0.75]
+    agent_candidates = [
+        c for c in skill_candidates
+        if len(c['instincts']) >= 3 and c['avg_confidence'] >= 0.75
+    ]
     if agent_candidates:
         print(f"\n## AGENT CANDIDATES ({len(agent_candidates)})\n")
         for cand in agent_candidates[:3]:
-            agent_name = cand['trigger'].replace(' ', '-')[:20] + '-agent'
+            agent_name = (
+                cand['trigger'].replace(' ', '-')[:20] + '-agent'
+            )
             print(f"  {agent_name}")
             print(f"    Covers {len(cand['instincts'])} instincts")
             print(f"    Avg confidence: {cand['avg_confidence']:.0%}")
@@ -439,9 +488,9 @@ def cmd_evolve(args):
 
     if args.generate:
         print("\n[Would generate evolved structures here]")
-        print("  Skills would be saved to:", EVOLVED_DIR / "skills")
-        print("  Commands would be saved to:", EVOLVED_DIR / "commands")
-        print("  Agents would be saved to:", EVOLVED_DIR / "agents")
+        print("  Skills would be saved to:", EVOLVED_DIR / 'skills')
+        print("  Commands would be saved to:", EVOLVED_DIR / 'commands')
+        print("  Agents would be saved to:", EVOLVED_DIR / 'agents')
 
     print(f"\n{'='*60}\n")
     return 0
@@ -452,28 +501,59 @@ def cmd_evolve(args):
 # ─────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description='Instinct CLI for Continuous Learning v2')
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    parser = argparse.ArgumentParser(
+        description='Instinct CLI for Continuous Learning v2'
+    )
+    subparsers = parser.add_subparsers(
+        dest='command', help='Available commands'
+    )
 
     # Status
-    status_parser = subparsers.add_parser('status', help='Show instinct status')
+    status_parser = subparsers.add_parser(
+        'status', help='Show instinct status'
+    )
 
     # Import
-    import_parser = subparsers.add_parser('import', help='Import instincts')
+    import_parser = subparsers.add_parser(
+        'import', help='Import instincts'
+    )
     import_parser.add_argument('source', help='File path or URL')
-    import_parser.add_argument('--dry-run', action='store_true', help='Preview without importing')
-    import_parser.add_argument('--force', action='store_true', help='Skip confirmation')
-    import_parser.add_argument('--min-confidence', type=float, help='Minimum confidence threshold')
+    import_parser.add_argument(
+        '--dry-run', action='store_true',
+        help='Preview without importing'
+    )
+    import_parser.add_argument(
+        '--force', action='store_true',
+        help='Skip confirmation'
+    )
+    import_parser.add_argument(
+        '--min-confidence', type=float,
+        help='Minimum confidence threshold'
+    )
 
     # Export
-    export_parser = subparsers.add_parser('export', help='Export instincts')
-    export_parser.add_argument('--output', '-o', help='Output file')
-    export_parser.add_argument('--domain', help='Filter by domain')
-    export_parser.add_argument('--min-confidence', type=float, help='Minimum confidence')
+    export_parser = subparsers.add_parser(
+        'export', help='Export instincts'
+    )
+    export_parser.add_argument(
+        '--output', '-o', help='Output file'
+    )
+    export_parser.add_argument(
+        '--domain', help='Filter by domain'
+    )
+    export_parser.add_argument(
+        '--min-confidence', type=float,
+        help='Minimum confidence'
+    )
 
     # Evolve
-    evolve_parser = subparsers.add_parser('evolve', help='Analyze and evolve instincts')
-    evolve_parser.add_argument('--generate', action='store_true', help='Generate evolved structures')
+    evolve_parser = subparsers.add_parser(
+        'evolve', help='Analyze and evolve instincts'
+    )
+    evolve_parser.add_argument(
+        '--generate', action='store_true',
+        help='Generate evolved structures'
+    )
 
     args = parser.parse_args()
 
